@@ -1,0 +1,6 @@
+framework module Pods_Sodimac_Diego8a_App_Sodimac_Diego8a_AppUITests {
+  umbrella header "Pods-Sodimac.Diego8a.App-Sodimac.Diego8a.AppUITests-umbrella.h"
+
+  export *
+  module * { export * }
+}
