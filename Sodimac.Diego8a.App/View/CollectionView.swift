@@ -23,7 +23,7 @@ struct CollectionView: View {
                     .shadow(radius: 10)
                     .padding()
                 Spacer()
-                var details = DetailsView()
+                var details = DetailsView(data: data)
                 NavigationLink(destination: details
                     .navigationTitle(data.name)
                     .navigationBarHidden(false)

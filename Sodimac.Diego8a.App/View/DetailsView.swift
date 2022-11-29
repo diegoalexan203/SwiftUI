@@ -8,35 +8,35 @@
 import SwiftUI
 
 struct DetailsView: View {
-    let data: CatCategory
+    var data: CatCategory?
     @ObservedObject var model = HomeCatViewModel()
     
     var body: some View {
         VStack {
             HStack {
                 Spacer()
-                AsyncImage(url: URL(string: data.image?.url ??  "https://acortar.link/pZezzI"),  scale: 7)
+                AsyncImage(url: URL(string: data?.image?.url ??  "https://acortar.link/pZezzI"),  scale: 7)
                     .frame(width: 200, height: 250)
                     .foregroundColor(.gray)
                     .shadow(radius: 10)
                 Spacer()
-            }
-            HStack {
+            }.padding()
+            VStack {
                 Spacer()
-                Label {
-                    Text(data.name ?? "")
+                Label{
+                    Text(data?.catCategoryDescription ?? "")
                         .font(.body)
                         .foregroundColor(.primary)
-                } icon: {}
-
+                }icon: {}
+                Spacer()
                 
-            }
+            }.padding()
         }.zIndex(1)
     }
 }
 
 struct DetailsView_Previews: PreviewProvider {
     static var previews: some View {
-        DetailsView(id: String)
+        DetailsView()
     }
 }
