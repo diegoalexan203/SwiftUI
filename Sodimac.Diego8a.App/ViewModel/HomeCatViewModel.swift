@@ -111,8 +111,4 @@ class HomeCatViewModel:ObservableObject{
             self.errorBD = $0.localizedDescription
         }
     }
-    
-    func reload() async {
-        await getCatCategory()
-    }
 }

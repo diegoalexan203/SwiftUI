@@ -10,6 +10,8 @@ import SwiftUI
 struct DetailsView: View {
     var data: CatCategory?
     @ObservedObject var model = HomeCatViewModel()
+    @State private var showingAlert = false
+    @State private var message = ""
     
     var body: some View {
         VStack {
@@ -20,9 +22,43 @@ struct DetailsView: View {
                     .foregroundColor(.gray)
                     .shadow(radius: 10)
                 Spacer()
+                
             }.padding()
+            VStack{
+                HStack{
+                    Spacer()
+                    Button(role: .none, action: {
+                        model.saveFavoriteCat(catCategory: data!)
+                        message = "Se ha guardado su categoria de gato favorito"
+                        showingAlert = model.isShowAlert
+                    }) {
+                        Label("", systemImage: "hand.thumbsup.fill")
+                    }.padding(.all, 6.0).zIndex(0)
+                        .foregroundColor(model.colorLike)
+                        .disabled(model.likeEnabled)
+                    Spacer()
+                    Button(role: .none, action: {
+                        model.deleteFavoriteCatCategory(catCategory: data!)
+                        if model.isShowAlert{
+                            message = "Se ha eliminado su categoria de gato favorito"
+                            showingAlert = model.isShowAlert
+                        }else{
+                            message = "No se ha podido eliminar la categoria de gatos favoritos, Puede ser que no exista localmente"
+                            showingAlert = true
+                        }
+                    }) {
+                        Label("", systemImage: "hand.thumbsdown.fill")
+                    }
+                    .foregroundColor(model.colorNotLike)
+                    .disabled(model.notLikeEnabled)
+                    Spacer()
+                        .alert(message, isPresented: $showingAlert) {
+                            Button("OK", role: .cancel) { }
+                        }
+                }.padding()
+            }
             VStack {
-                Spacer()
+                
                 Label{
                     Text(data?.catCategoryDescription ?? "")
                         .font(.body)
@@ -30,8 +66,13 @@ struct DetailsView: View {
                 }icon: {}
                 Spacer()
                 
+                
             }.padding()
         }.zIndex(1)
+            .onAppear(perform: fetch)
+    }
+    private func fetch() {
+        model.fetch(category: data!)
     }
 }
 

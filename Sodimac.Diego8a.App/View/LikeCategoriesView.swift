@@ -22,7 +22,7 @@ struct LikeCategoriesView: View {
         }
     }
 }
-  
+
 struct LikeCategoriesView_Previews: PreviewProvider {
     static var previews: some View {
         LikeCategoriesView()
