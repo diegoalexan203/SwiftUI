@@ -7,6 +7,7 @@
 
 import Foundation
 import Combine
+import SwiftUI
 
 class HomeCatViewModel:ObservableObject{
     
@@ -31,6 +32,19 @@ class HomeCatViewModel:ObservableObject{
         }
     }
     
+    @Published var colorLike : Color?  {
+        didSet {
+            didChange.send(self)
+        }
+    }
+    
+    @Published var colorNotLike : Color?  {
+        didSet {
+            didChange.send(self)
+        }
+    }
+ 
+    
     @Published var errorBD = String(){
         didSet{
             didChange.send(self)
@@ -46,6 +60,8 @@ class HomeCatViewModel:ObservableObject{
     func saveFavoriteCat(catCategory: CatCategory){
         catService.saveFavoriteCatCategory(category: catCategory) {
             self.isShowAlert = $0
+            self.colorLike = Color.gray
+            self.colorNotLike = Color.blue
         } onFailure: { 
             self.errorBD = $0.localizedDescription
         }
@@ -54,8 +70,29 @@ class HomeCatViewModel:ObservableObject{
     func deleteFavoriteCatCategory(catCategory: CatCategory){
         catService.deleteFavoriteCatCategory(catCategory: catCategory){
             self.isShowAlert = $0
+            self.colorLike = Color.blue
+            self.colorNotLike = Color.gray
         } onFailure: {
             self.errorBD = $0.localizedDescription
         }
+    }
+    
+    func fetch(category: CatCategory) {
+        catService.getCatCategoryById(idCategory: category.id) {
+            if $0 != nil {
+                self.colorLike = Color.gray
+                self.colorNotLike = Color.blue
+            }else{
+                self.colorLike = Color.blue
+                self.colorNotLike = Color.gray
+            }
+        
+        } onFailure: {
+            self.errorBD = $0.localizedDescription
+        }
+    }
+    
+    func reload() async {
+        await getCatCategory()
     }
 }

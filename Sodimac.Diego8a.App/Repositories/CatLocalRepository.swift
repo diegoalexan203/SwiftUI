@@ -25,4 +25,22 @@ class CatLocalRepository: CatLocalRepositoryProtocol {
             onFailure(error)
         }
     }
+    
+    func getCatCategoryById(idCategory: String, onSuccess: (CatCategory?) -> Void, onFailure: (Error) -> Void) {
+        do{
+            let category = try ManagerDB().getCatCategoryById(idCategory: idCategory)
+            onSuccess(category)
+        }catch let error as NSError{
+            onFailure(error)
+        }
+    }
+    
+    func getLocalCatCategories(onSuccess: ([CatCategory]) -> Void) {
+        do{
+            let categories = try ManagerDB().GetCatCategories()
+            onSuccess(categories)
+        }catch let error as NSError{
+            print("error")
+        }
+    }
 }

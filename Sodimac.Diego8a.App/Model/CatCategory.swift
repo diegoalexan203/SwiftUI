@@ -13,9 +13,8 @@ struct CatCategory: Codable, Identifiable {
     let catCategoryDescription, lifeSpan: String?
     let wikipediaURL: String?
     let image: CatImage?
-   
-    var favorite: Bool?
-    var date : Date?
+    
+    var date : String?
 
     enum CodingKeys: String, CodingKey {
         case id, name
@@ -23,7 +22,6 @@ struct CatCategory: Codable, Identifiable {
         case lifeSpan = "life_span"
         case wikipediaURL = "wikipedia_url"
         case image
-        case favorite
         case date
     }
 }

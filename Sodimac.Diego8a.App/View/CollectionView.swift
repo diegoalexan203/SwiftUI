@@ -23,7 +23,7 @@ struct CollectionView: View {
                     .shadow(radius: 10)
                     .padding()
                 Spacer()
-                var details = DetailsView(data: data)
+                let details = DetailsView(data: data)
                 NavigationLink(destination: details
                     .navigationTitle(data.name)
                     .navigationBarHidden(false)
@@ -35,11 +35,12 @@ struct CollectionView: View {
                 Spacer()
                 Button(role: .none, action: {}) {
                     Label("", systemImage: "hand.thumbsup.fill")
-                }.padding(.all, 6.0).zIndex(0).onTapGesture {
-                    model.saveFavoriteCat(catCategory: data)
-                    message = "Se ha guardado su categoria de gato favorito"
-                    showingAlert = model.isShowAlert
-                }
+                }.padding(.all, 6.0).zIndex(0)
+                    .onTapGesture {
+                        model.saveFavoriteCat(catCategory: data)
+                        message = "Se ha guardado su categoria de gato favorito"
+                        showingAlert = model.isShowAlert
+                    }.foregroundColor(model.colorLike)
                 Text(self.data.name).multilineTextAlignment(.center)
                     .frame(maxWidth: .infinity, alignment: .center)
                 
@@ -54,14 +55,19 @@ struct CollectionView: View {
                         message = "No se ha podido eliminar la categoria de gatos favoritos, Puede ser que no exista localmente"
                         showingAlert = true
                     }
-                }
+                }.foregroundColor(model.colorNotLike)
                 
-                .alert(message, isPresented: $showingAlert) {
-                    Button("OK", role: .cancel) { }
-                }
+                    .alert(message, isPresented: $showingAlert) {
+                        Button("OK", role: .cancel) { }
+                    }
                 
             }
         }.zIndex(1)
+            .onAppear(perform: fetch)
+    }
+    
+    private func fetch() {
+        model.fetch(category: data)
     }
 }
 

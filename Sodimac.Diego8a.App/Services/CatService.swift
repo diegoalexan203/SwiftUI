@@ -17,6 +17,14 @@ class CatService: CatServiceProtocol{
         self.catLocalRepository = catLocalRepository
     }
     
+    func getCatCategoryById(idCategory: String, onSuccess: (CatCategory?) -> Void, onFailure: (Error) -> Void) {
+        catLocalRepository.getCatCategoryById(idCategory: idCategory){
+            onSuccess($0)
+        } onFailure: {Error in
+            onFailure(Error)
+        }
+    }
+    
     func getCatCategories(completion: @escaping ([CatCategory]) -> ()) {
         catRepository.getCatCategories{
             completion($0)
@@ -39,6 +47,12 @@ class CatService: CatServiceProtocol{
             onFailure(Error)
         }
         
+    }
+    
+    func getLocalCatCategories(completion: @escaping ([CatCategory]) -> ()) {
+        catLocalRepository.getLocalCatCategories(){
+            completion($0)
+        }
     }
     
 }

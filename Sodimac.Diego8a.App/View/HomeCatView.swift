@@ -13,7 +13,8 @@ struct HomeCatView: View {
         NavigationView{
             List(model.catCategories) { category in
                 CollectionView(data: category)
-            }.navigationBarTitle("Prueba Diego Ochoa")
+            }
+            .navigationBarTitle("Prueba Diego Ochoa")
                 .navigationBarTitleDisplayMode(.automatic)
         }
     }

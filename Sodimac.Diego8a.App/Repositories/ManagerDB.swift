@@ -15,8 +15,9 @@ class ManagerDB{
     
     let id = Expression<String>("id")
     let name = Expression<String>("name")
-    let date = Expression<Date>("date")
-    let favorite = Expression<Bool>("favorite")
+    let date = Expression<String>("date")
+    let catImage = Expression<String>("catImage")
+    let descritpion = Expression<String>("descritpion")
     
     init() {
         catDB = createDatabase()
@@ -41,7 +42,8 @@ class ManagerDB{
             table.column(id)
             table.column(name)
             table.column(date)
-            table.column(favorite)
+            table.column(catImage)
+            table.column(descritpion)
         }
         do {
             try catDB.run(tableToCreate)
@@ -51,7 +53,10 @@ class ManagerDB{
     }
     
     func create(catCategory: CatCategory) throws {
-        let catCategoryToInsert = catTable.insert(id <- catCategory.id, name <- catCategory.name, date <- Date.now, favorite <- catCategory.favorite ?? false)
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd-MM-YYYY"
+        let catCategoryToInsert = catTable.insert(id <- catCategory.id, name <- catCategory.name, date <- dateFormatter.string(from: Date()), catImage <- catCategory.image!.url,
+                                                  descritpion <- catCategory.catCategoryDescription ?? "" )
         try catDB.run(catCategoryToInsert)
         print("Cat Category registered successfully")
     }
@@ -62,20 +67,36 @@ class ManagerDB{
         return try catDB.run(delete)
     }
     
-    func getUsers() -> [CatCategory] {
+    func GetCatCategories() -> [CatCategory] {
         var categoriesArray = [CatCategory]()
         
         do {
             let categories = try catDB.prepare(catTable)
             
             for category in categories {
-                let categoryScoped = CatCategory(id: category[id], name: category[name], catCategoryDescription: nil, lifeSpan: nil, wikipediaURL: nil, image: nil)
-                categoriesArray.append(categoryScoped)
+                let catImage = CatImage(id: "", width: 0, height: 0, url: category[catImage])
+                let categoryScoped = CatCategory(id: category[id], name: category[name], catCategoryDescription: category[descritpion], lifeSpan: "", wikipediaURL: "", image: catImage, date: category[date])
+                    categoriesArray.append(categoryScoped)
             }
             return categoriesArray
         } catch {
             print(error)
             return categoriesArray
         }
+    }
+    
+    func getCatCategoryById(idCategory: String) -> CatCategory? {
+        let categoryFromDb: Table = catTable.filter(id == idCategory)
+        var category: CatCategory?
+        do{
+            for categoryGetted in try catDB.prepare(categoryFromDb){
+                var catImage = CatImage(id: "", width: 0, height: 0, url: categoryGetted[catImage])
+                category = CatCategory(id: categoryGetted[id], name: categoryGetted[name], catCategoryDescription: categoryGetted[descritpion], lifeSpan: "", wikipediaURL: "", image: catImage, date: categoryGetted[date])
+                return category
+            }
+        } catch {
+            print(error)
+        }
+        return category
     }
 }

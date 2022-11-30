@@ -13,4 +13,8 @@ protocol CatLocalRepositoryProtocol {
     
     func deleteFavoriteCatCategory(catCategory: CatCategory, onSuccess: (Bool) -> Void,
                                  onFailure:(Error) -> Void)
+    
+    func getCatCategoryById(idCategory: String, onSuccess: (CatCategory?) -> Void, onFailure: (Error) -> Void)
+    
+    func getLocalCatCategories(onSuccess: ([CatCategory]) -> Void) 
 }
