@@ -41,6 +41,8 @@ struct CollectionView: View {
                         message = "Se ha guardado su categoria de gato favorito"
                         showingAlert = model.isShowAlert
                     }.foregroundColor(model.colorLike)
+                    .disabled(model.likeEnabled)
+                
                 Text(self.data.name).multilineTextAlignment(.center)
                     .frame(maxWidth: .infinity, alignment: .center)
                 
@@ -56,6 +58,7 @@ struct CollectionView: View {
                         showingAlert = true
                     }
                 }.foregroundColor(model.colorNotLike)
+                    .disabled(model.notLikeEnabled)
                 
                     .alert(message, isPresented: $showingAlert) {
                         Button("OK", role: .cancel) { }

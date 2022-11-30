@@ -10,8 +10,15 @@ import SwiftUI
 struct LikeCategoriesView: View {
     @ObservedObject var model = LikeCategoriesViewModel()
     var body: some View {
-        List(model.catCategories) { category in
-            LikeCollectionView(data: category)
+        if model.catCategories.isEmpty{
+            VStack{
+                Image("EmptyCats")
+                Text("No hay gatos para mostrar")
+            }
+        }else{
+            List(model.catCategories) { category in
+                LikeCollectionView(data: category)
+            }
         }
     }
 }

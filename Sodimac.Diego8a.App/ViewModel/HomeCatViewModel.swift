@@ -51,6 +51,18 @@ class HomeCatViewModel:ObservableObject{
         }
     }
     
+    @Published var likeEnabled = Bool(){
+        didSet{
+            didChange.send(self)
+        }
+    }
+    
+    @Published var notLikeEnabled = Bool(){
+        didSet{
+            didChange.send(self)
+        }
+    }
+    
     func getCatCategory(){
         catService.getCatCategories{
             self.catCategories = $0
@@ -62,6 +74,8 @@ class HomeCatViewModel:ObservableObject{
             self.isShowAlert = $0
             self.colorLike = Color.gray
             self.colorNotLike = Color.blue
+            self.notLikeEnabled = false
+            self.likeEnabled = true
         } onFailure: { 
             self.errorBD = $0.localizedDescription
         }
@@ -72,6 +86,8 @@ class HomeCatViewModel:ObservableObject{
             self.isShowAlert = $0
             self.colorLike = Color.blue
             self.colorNotLike = Color.gray
+            self.notLikeEnabled = true
+            self.likeEnabled = false
         } onFailure: {
             self.errorBD = $0.localizedDescription
         }
@@ -82,9 +98,13 @@ class HomeCatViewModel:ObservableObject{
             if $0 != nil {
                 self.colorLike = Color.gray
                 self.colorNotLike = Color.blue
+                self.notLikeEnabled = false
+                self.likeEnabled = true
             }else{
                 self.colorLike = Color.blue
                 self.colorNotLike = Color.gray
+                self.notLikeEnabled = true
+                self.likeEnabled = false
             }
         
         } onFailure: {
